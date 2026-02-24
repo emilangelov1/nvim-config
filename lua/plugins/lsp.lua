@@ -2,54 +2,88 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      diagnostics = {
+        virtual_text = true,
+        signs = true,
+        update_in_insert = false,
+        underline = true,
+        severity_sort = true,
+      },
       servers = {
-        tailwindcss = {
-	  filetypes = {
-	    "html",
-	    "css",
-	    "javascript",
-	    "javascriptreact",
-	    "typescript",
-	    "typescriptreact",
-	  },
-	},
-        -- TypeScript/JavaScript LSP with enhanced settings
-        ts_ls = {
+        -- vtsls: handles Nx project references correctly (unlike ts_ls)
+        -- LazyVim typescript extra enables vtsls; we configure it here
+        vtsls = {
           settings = {
             typescript = {
+              tsserver = {
+                maxTsServerMemory = 32768, -- 32GB
+              },
               inlayHints = {
-                includeInlayParameterNameHints = "all",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
+                parameterNames = { enabled = "all" },
+                parameterTypes = { enabled = true },
+                variableTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                enumMemberValues = { enabled = true },
               },
-              suggest = {
-                autoImports = true,
-              },
+              suggest = { autoImports = true },
+              updateImportsOnFileMove = { enabled = "always" },
             },
             javascript = {
               inlayHints = {
-                includeInlayParameterNameHints = "all",
-                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                includeInlayFunctionParameterTypeHints = true,
-                includeInlayVariableTypeHints = true,
-                includeInlayPropertyDeclarationTypeHints = true,
-                includeInlayFunctionLikeReturnTypeHints = true,
-                includeInlayEnumMemberValueHints = true,
+                parameterNames = { enabled = "all" },
+                parameterTypes = { enabled = true },
+                variableTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                enumMemberValues = { enabled = true },
               },
-              suggest = {
-                autoImports = true,
+              suggest = { autoImports = true },
+            },
+          },
+        },
+        -- ESLint LSP for linting
+        eslint = {
+          settings = {
+            workingDirectories = { mode = "auto" },
+          },
+        },
+        -- JSON LS for tsconfig.json and similar files
+        jsonls = {},
+        -- Lua for neovim config
+        lua_ls = {
+          settings = {
+            Lua = {
+              runtime = { version = "LuaJIT" },
+              diagnostics = {
+                globals = { "vim" },
               },
             },
           },
-          -- Add keybinding for code actions
-          keys = {
-            { "<leader>cA", function() vim.lsp.buf.code_action() end, desc = "Code Actions" },
+        },
+        tailwindcss = {
+          filetypes = {
+            "html",
+            "css",
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
           },
         },
+      },
+    },
+  },
+  -- Mason for automatic LSP installation
+  {
+    "mason-org/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "vtsls",
+        "eslint-lsp",
+        "json-lsp",
+        "lua-language-server",
+        "tailwindcss-language-server",
       },
     },
   },

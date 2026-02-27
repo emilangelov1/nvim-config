@@ -28,6 +28,9 @@ return {
               },
               suggest = { autoImports = true },
               updateImportsOnFileMove = { enabled = "always" },
+              preferences = {
+                importModuleSpecifier = "project-relative",
+              },
             },
             javascript = {
               inlayHints = {
@@ -39,6 +42,9 @@ return {
                 enumMemberValues = { enabled = true },
               },
               suggest = { autoImports = true },
+              preferences = {
+                importModuleSpecifier = "project-relative",
+              },
             },
           },
         },
